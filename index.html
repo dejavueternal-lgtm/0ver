@@ -20,6 +20,7 @@ input, select, button {
   background: #222;
   color: #fff;
   border: 1px solid #444;
+  box-sizing: border-box;
 }
 
 h2 {
@@ -56,7 +57,7 @@ button:hover {
 <select id="unit"></select>
 
 <label>Позивний</label>
-<input id="callsign" type="text">
+<select id="callsign"></select>
 
 <label>Н.П.</label>
 <input id="settlement" type="text">
@@ -93,7 +94,9 @@ button:hover {
 <script>
 
 // ===== СПИСКИ =====
-const units = ["438 одн БпС ППО"];
+const units = [
+  "438 одн БпС ППО"
+];
 
 const callsigns = [
   "Вампір",
@@ -109,7 +112,7 @@ const callsigns = [
   "Чугайстер",
   "Мавка",
   "Домовик"
-  ];
+];
 
 const regions = [
   "Київська",
@@ -121,16 +124,22 @@ const regions = [
   "Кіровоградська"
 ];
 
-const drones = ["P1-SUN", "STING", "AS3-IR Merops", "LITAVR F7", "Interceptor"];
+const drones = [
+  "P1-SUN",
+  "STING",
+  "AS3-IR Merops",
+  "LITAVR F7",
+  "Interceptor"
+];
 
-// ✔ Основной результат
+// ===== Основний результат =====
 const resultMain = [
   "ціль уражена",
   "ціль знищена",
   "ціль не виявлено"
 ];
 
-// ✔ Уточнение
+// ===== Уточнення =====
 const resultExtra = [
   "втрата керування",
   "втрата управління",
@@ -139,9 +148,10 @@ const resultExtra = [
   "успішно"
 ];
 
-// ===== заполнение =====
-function fillSelect(id, data){
+// ===== Заповнення select =====
+function fillSelect(id, data) {
   const el = document.getElementById(id);
+
   el.innerHTML = "";
 
   data.forEach(v => {
@@ -152,20 +162,22 @@ function fillSelect(id, data){
   });
 }
 
+// ===== Заповнення списків =====
 fillSelect("unit", units);
+fillSelect("callsign", callsigns);
 fillSelect("region", regions);
 fillSelect("drone", drones);
-
 fillSelect("resultMain", resultMain);
 fillSelect("resultExtra", resultExtra);
 
-// ===== утилита =====
-function val(id){
+// ===== Утиліта =====
+function val(id) {
   return document.getElementById(id).value || "";
 }
 
-// ===== генерация =====
-function generate(){
+// ===== Генерація =====
+function generate() {
+
   const text =
 `Дата: ${val("date")}
 Підрозділ: ${val("unit")}
