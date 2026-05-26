@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Щоденна доповідь</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #111;
+  color: #eee;
+  padding: 20px;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+h2 {
+  border-bottom: 1px solid #333;
+  padding-bottom: 6px;
+}
+
+button {
+  cursor: pointer;
+  background: #2d6cdf;
+}
+
+button:hover {
+  background: #1f4fb0;
+}
+
+.output {
+  white-space: pre-wrap;
+  background: #1a1a1a;
+  padding: 10px;
+  border: 1px solid #333;
+}
+</style>
+</head>
+
+<body>
+
+<h2>ЩОДЕННА ДОПОВІДЬ</h2>
+
+<label>Дата</label>
+<input id="date" type="date">
+
+<label>Підрозділ</label>
+<select id="unit"></select>
+
+<label>Позивний</label>
+<input id="callsign" type="text">
+
+<label>Н.П.</label>
+<input id="settlement" type="text">
+
+<label>Область</label>
+<select id="region"></select>
+
+<label>Час взльоту</label>
+<input id="takeoff" type="time">
+
+<label>Час посадки</label>
+<input id="landing" type="time">
+
+<label>БПЛА</label>
+<select id="drone"></select>
+
+<label>Ціль</label>
+<input id="target" type="text">
+
+<label>Висота</label>
+<input id="height" type="text">
+
+<label>Результат</label>
+<select id="resultMain"></select>
+
+<label>Уточнення</label>
+<select id="resultExtra"></select>
+
+<button onclick="generate()">Згенерувати звіт</button>
+
+<h3>Результат:</h3>
+<div class="output" id="output"></div>
+
+<script>
+
+// ===== СПИСКИ =====
+const units = ["1 батарея", "5222", "2 батарея", "3 батарея", "4 батарея"];
+
+const regions = [
+  "Київська",
+  "Харківська",
+  "Дніпропетровська",
+  "Полтавська",
+  "Чернігівська",
+  "Черкаська",
+  "Кіровоградська"
+];
+
+const drones = ["P1-SUN", "STING", "AS3-IR Merops", "LITAVR F7", "Interceptor"];
+
+// ✔ Основной результат
+const resultMain = [
+  "ціль уражена",
+  "ціль знищена",
+  "ціль не виявлено"
+];
+
+// ✔ Уточнение
+const resultExtra = [
+  "втрата керування",
+  "втрата управління",
+  "борт повернуто",
+  "підірвано в повітрі"
+];
+
+// ===== заполнение =====
+function fillSelect(id, data){
+  const el = document.getElementById(id);
+  el.innerHTML = "";
+
+  data.forEach(v => {
+    const opt = document.createElement("option");
+    opt.value = v;
+    opt.textContent = v;
+    el.appendChild(opt);
+  });
+}
+
+fillSelect("unit", units);
+fillSelect("region", regions);
+fillSelect("drone", drones);
+
+fillSelect("resultMain", resultMain);
+fillSelect("resultExtra", resultExtra);
+
+// ===== утилита =====
+function val(id){
+  return document.getElementById(id).value || "";
+}
+
+// ===== генерация =====
+function generate(){
+  const text =
+`Дата: ${val("date")}
+Підрозділ: ${val("unit")}
+Позивний: ${val("callsign")}
+Н.П.: ${val("settlement")}
+Область: ${val("region")}
+Час взльоту: ${val("takeoff")}
+Час посадки: ${val("landing")}
+БПЛА: ${val("drone")}
+Ціль: ${val("target")}
+Висота: ${val("height")}
+Результат: ${val("resultMain")}
+Уточнення: ${val("resultExtra")}`;
+
+  document.getElementById("output").innerText = text;
+}
+
+</script>
+
+</body>
+</html>
