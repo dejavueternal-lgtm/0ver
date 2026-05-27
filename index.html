@@ -27,7 +27,6 @@ label {
 
 input,
 select,
-textarea,
 button {
   width: 100%;
   padding: 10px;
@@ -282,11 +281,6 @@ function addEntry() {
         <input type="text" class="distance">
       </div>
 
-      <div>
-        <label>Висота цілі</label>
-        <input type="text" class="targetHeight">
-      </div>
-
     </div>
 
     <div class="row">
@@ -302,6 +296,9 @@ function addEntry() {
       </div>
 
     </div>
+
+    <label>Координати</label>
+    <input type="text" class="coordinates">
 
     <button
       type="button"
@@ -344,9 +341,9 @@ async function generate() {
 
 Азимут на ціль: ${e.querySelector(".azimuth").value}
 Дальність до цілі: ${e.querySelector(".distance").value}
-Висота цілі: ${e.querySelector(".targetHeight").value}
 № борта: ${e.querySelector(".boardNumber").value}
-Бойова частина: ${e.querySelector(".warhead").value}`;
+Бойова частина: ${e.querySelector(".warhead").value}
+Координати: ${e.querySelector(".coordinates").value}`;
 
   });
 
