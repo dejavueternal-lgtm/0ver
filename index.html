@@ -5,44 +5,102 @@
 <title>Доповідь по застосуванню</title>
 
 <style>
+
 body {
-  font-family: Arial;
-  background: #111;
-  color: #eee;
+  font-family: Arial, sans-serif;
+  background: #0b1323;
+  color: #fff;
   padding: 20px;
 }
 
-input, select, button {
-  width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-  margin-bottom: 12px;
-  background: #222;
-  color: #fff;
-  border: 1px solid #444;
-  box-sizing: border-box;
+h2 {
+  border-bottom: 1px solid #2b3650;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
 }
 
-h2 {
-  border-bottom: 1px solid #333;
-  padding-bottom: 6px;
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+
+input,
+select,
+textarea,
+button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid #3b4867;
+  background: #f2f2f2;
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
 }
 
 button {
+  background: #2b6de0;
+  color: white;
   cursor: pointer;
-  background: #2d6cdf;
+  border: none;
+  font-weight: bold;
 }
 
 button:hover {
-  background: #1f4fb0;
+  background: #1d57ba;
+}
+
+.remove-btn {
+  background: #c62828;
+}
+
+.remove-btn:hover {
+  background: #8f1b1b;
+}
+
+.add-btn {
+  margin-top: 15px;
+}
+
+.entry {
+  border: 1px solid #2b3650;
+  background: #111c33;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 10px;
+}
+
+.row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.row > div {
+  flex: 1;
 }
 
 .output {
   white-space: pre-wrap;
-  background: #1a1a1a;
-  padding: 10px;
-  border: 1px solid #333;
+  background: #111827;
+  padding: 15px;
+  border: 1px solid #2b3650;
+  margin-top: 20px;
+  border-radius: 8px;
 }
+
+@media (max-width: 700px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
 </style>
 </head>
 
@@ -86,14 +144,28 @@ button:hover {
 <label>Уточнення</label>
 <select id="resultExtra"></select>
 
-<button onclick="generate()">Згенерувати звіт</button>
+<h2>Додаткові результати</h2>
+
+<div id="entries"></div>
+
+<button class="add-btn" type="button" onclick="addEntry()">
+  + Додати запис
+</button>
+
+<br><br>
+
+<button onclick="generate()">
+  Згенерувати звіт
+</button>
 
 <h3>Результат:</h3>
+
 <div class="output" id="output"></div>
 
 <script>
 
 // ===== СПИСКИ =====
+
 const units = [
   "438 одн БпС ППО"
 ];
@@ -132,14 +204,12 @@ const drones = [
   "Interceptor"
 ];
 
-// ===== Основний результат =====
 const resultMain = [
   "ціль уражена",
   "ціль знищена",
   "ціль не виявлено"
 ];
 
-// ===== Уточнення =====
 const resultExtra = [
   "втрата керування",
   "втрата управління",
@@ -149,20 +219,24 @@ const resultExtra = [
 ];
 
 // ===== Заповнення select =====
+
 function fillSelect(id, data) {
+
   const el = document.getElementById(id);
 
   el.innerHTML = "";
 
   data.forEach(v => {
+
     const opt = document.createElement("option");
+
     opt.value = v;
     opt.textContent = v;
+
     el.appendChild(opt);
   });
 }
 
-// ===== Заповнення списків =====
 fillSelect("unit", units);
 fillSelect("callsign", callsigns);
 fillSelect("region", regions);
@@ -171,14 +245,132 @@ fillSelect("resultMain", resultMain);
 fillSelect("resultExtra", resultExtra);
 
 // ===== Утиліта =====
+
 function val(id) {
   return document.getElementById(id).value || "";
 }
 
+// ===== Додавання запису =====
+
+let entryIndex = 0;
+
+function addEntry() {
+
+  const container = document.getElementById("entries");
+
+  const div = document.createElement("div");
+
+  div.className = "entry";
+
+  div.innerHTML = `
+
+    <h3>Запис #${entryIndex + 1}</h3>
+
+    <div class="row">
+
+      <div>
+        <label>Азимут на ціль</label>
+        <input type="text" class="azimuth">
+      </div>
+
+      <div>
+        <label>Дальність до цілі</label>
+        <input type="text" class="distance">
+      </div>
+
+      <div>
+        <label>Висота цілі</label>
+        <input type="text" class="targetHeight">
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div>
+        <label>А</label>
+        <input type="number" class="a">
+      </div>
+
+      <div>
+        <label>Д</label>
+        <input type="number" class="d">
+      </div>
+
+      <div>
+        <label>К</label>
+        <input type="number" class="k">
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div>
+        <select class="fireType">
+          <option>обстріляно</option>
+          <option>уражено</option>
+          <option>знищено</option>
+        </select>
+      </div>
+
+      <div>
+        <select class="count">
+          <option value="">Кількість</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
+
+      <div>
+        <select class="classType">
+          <option value="">Клас</option>
+          <option>Легкий</option>
+          <option>Середній</option>
+          <option>Важкий</option>
+        </select>
+      </div>
+
+    </div>
+
+    <label>Коментар:</label>
+
+    <textarea class="comment" placeholder="Додаткові відомості..."></textarea>
+
+    <label>Особовий склад:</label>
+
+    <select class="rank">
+      <option>Звання</option>
+      <option>Солдат</option>
+      <option>Сержант</option>
+      <option>Лейтенант</option>
+    </select>
+
+    <input type="text" class="person" placeholder="ПІБ">
+
+    <button
+      type="button"
+      class="remove-btn"
+      onclick="this.parentElement.remove()"
+    >
+      Видалити
+    </button>
+
+  `;
+
+  container.appendChild(div);
+
+  entryIndex++;
+}
+
 // ===== Генерація =====
+
 function generate() {
 
-  const text =
+  let text =
 `Дата: ${val("date")}
 Підрозділ: ${val("unit")}
 Позивний: ${val("callsign")}
@@ -190,7 +382,55 @@ function generate() {
 Ціль: ${val("target")}
 Висота: ${val("height")}
 Результат: ${val("resultMain")}
-Уточнення: ${val("resultExtra")}`;
+Уточнення: ${val("resultExtra")}
+`;
+
+  const entries = document.querySelectorAll(".entry");
+
+  entries.forEach((e, i) => {
+
+    text += `
+
+========================
+ДОДАТКОВИЙ ЗАПИС ${i + 1}
+========================
+
+Азимут на ціль:
+${e.querySelector(".azimuth").value}
+
+Дальність до цілі:
+${e.querySelector(".distance").value}
+
+Висота цілі:
+${e.querySelector(".targetHeight").value}
+
+А:
+${e.querySelector(".a").value}
+
+Д:
+${e.querySelector(".d").value}
+
+К:
+${e.querySelector(".k").value}
+
+Статус:
+${e.querySelector(".fireType").value}
+
+Кількість:
+${e.querySelector(".count").value}
+
+Клас:
+${e.querySelector(".classType").value}
+
+Коментар:
+${e.querySelector(".comment").value}
+
+Особовий склад:
+${e.querySelector(".rank").value}
+${e.querySelector(".person").value}
+
+`;
+  });
 
   document.getElementById("output").innerText = text;
 }
