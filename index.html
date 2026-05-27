@@ -145,7 +145,7 @@ button:hover {
 <label>Уточнення</label>
 <select id="resultExtra"></select>
 
-<h2>Додаткові результати</h2>
+<h2>Додаткові відомості</h2>
 
 <div id="entries"></div>
 
@@ -297,8 +297,19 @@ function addEntry() {
 
     </div>
 
-    <label>Координати</label>
-    <input type="text" class="coordinates">
+    <div class="row">
+
+      <div>
+        <label>Широта</label>
+        <input type="text" class="latitude">
+      </div>
+
+      <div>
+        <label>Довгота</label>
+        <input type="text" class="longitude">
+      </div>
+
+    </div>
 
     <button
       type="button"
@@ -343,7 +354,8 @@ async function generate() {
 Дальність до цілі: ${e.querySelector(".distance").value}
 № борта: ${e.querySelector(".boardNumber").value}
 Бойова частина: ${e.querySelector(".warhead").value}
-Координати: ${e.querySelector(".coordinates").value}`;
+Широта: ${e.querySelector(".latitude").value}
+Довгота: ${e.querySelector(".longitude").value}`;
 
   });
 
