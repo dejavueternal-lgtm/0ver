@@ -2,6 +2,10 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
+
+<!-- ВАЖЛИВО ДЛЯ СМАРТФОНІВ -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Доповідь по застосуванню</title>
 
 <style>
@@ -98,10 +102,59 @@ button:hover {
   font-weight: bold;
 }
 
+/* ===== МОБІЛЬНА ВЕРСІЯ ===== */
+
 @media (max-width: 700px) {
+
+  body {
+    padding: 16px;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  h3 {
+    font-size: 24px;
+  }
+
+  label {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  input,
+  select,
+  button {
+    font-size: 22px;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+  }
+
+  button {
+    min-height: 65px;
+  }
+
+  .entry {
+    padding: 20px;
+    border-radius: 14px;
+  }
+
+  .output {
+    font-size: 20px;
+    padding: 18px;
+  }
+
+  .success {
+    font-size: 20px;
+  }
+
   .row {
     flex-direction: column;
+    gap: 5px;
   }
+
 }
 
 </style>
