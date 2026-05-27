@@ -39,11 +39,6 @@ button {
   font-size: 15px;
 }
 
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
 button {
   background: #2b6de0;
   color: white;
@@ -294,9 +289,19 @@ function addEntry() {
 
     </div>
 
-    <label>Коментар:</label>
+    <div class="row">
 
-    <textarea class="comment" placeholder="Додаткові відомості..."></textarea>
+      <div>
+        <label>№ борта</label>
+        <input type="text" class="boardNumber">
+      </div>
+
+      <div>
+        <label>Бойова частина</label>
+        <input type="text" class="warhead">
+      </div>
+
+    </div>
 
     <button
       type="button"
@@ -329,8 +334,7 @@ async function generate() {
 Ціль: ${val("target")}
 Висота: ${val("height")}
 Результат: ${val("resultMain")}
-Уточнення: ${val("resultExtra")}
-`;
+Уточнення: ${val("resultExtra")}`;
 
   const entries = document.querySelectorAll(".entry");
 
@@ -338,19 +342,12 @@ async function generate() {
 
     text += `
 
-Азимут на ціль:
-${e.querySelector(".azimuth").value}
+Азимут на ціль: ${e.querySelector(".azimuth").value}
+Дальність до цілі: ${e.querySelector(".distance").value}
+Висота цілі: ${e.querySelector(".targetHeight").value}
+№ борта: ${e.querySelector(".boardNumber").value}
+Бойова частина: ${e.querySelector(".warhead").value}`;
 
-Дальність до цілі:
-${e.querySelector(".distance").value}
-
-Висота цілі:
-${e.querySelector(".targetHeight").value}
-
-Коментар:
-${e.querySelector(".comment").value}
-
-`;
   });
 
   // Вивід на екран
