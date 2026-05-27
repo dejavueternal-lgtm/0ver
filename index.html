@@ -50,6 +50,7 @@ button {
   cursor: pointer;
   border: none;
   font-weight: bold;
+  transition: 0.2s;
 }
 
 button:hover {
@@ -93,6 +94,12 @@ button:hover {
   border: 1px solid #2b3650;
   margin-top: 20px;
   border-radius: 8px;
+}
+
+.success {
+  margin-top: 15px;
+  color: #4cff7b;
+  font-weight: bold;
 }
 
 @media (max-width: 700px) {
@@ -155,8 +162,10 @@ button:hover {
 <br><br>
 
 <button onclick="generate()">
-  Згенерувати звіт
+  Згенерувати звіт та скопіювати
 </button>
+
+<div class="success" id="success"></div>
 
 <h3>Результат:</h3>
 
@@ -285,71 +294,9 @@ function addEntry() {
 
     </div>
 
-    <div class="row">
-
-      <div>
-        <label>А</label>
-        <input type="number" class="a">
-      </div>
-
-      <div>
-        <label>Д</label>
-        <input type="number" class="d">
-      </div>
-
-      <div>
-        <label>К</label>
-        <input type="number" class="k">
-      </div>
-
-    </div>
-
-    <div class="row">
-
-      <div>
-        <select class="fireType">
-          <option>обстріляно</option>
-          <option>уражено</option>
-          <option>знищено</option>
-        </select>
-      </div>
-
-      <div>
-        <select class="count">
-          <option value="">Кількість</option>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-      </div>
-
-      <div>
-        <select class="classType">
-          <option value="">Клас</option>
-          <option>Легкий</option>
-          <option>Середній</option>
-          <option>Важкий</option>
-        </select>
-      </div>
-
-    </div>
-
     <label>Коментар:</label>
 
     <textarea class="comment" placeholder="Додаткові відомості..."></textarea>
-
-    <label>Особовий склад:</label>
-
-    <select class="rank">
-      <option>Звання</option>
-      <option>Солдат</option>
-      <option>Сержант</option>
-      <option>Лейтенант</option>
-    </select>
-
-    <input type="text" class="person" placeholder="ПІБ">
 
     <button
       type="button"
@@ -368,7 +315,7 @@ function addEntry() {
 
 // ===== Генерація =====
 
-function generate() {
+async function generate() {
 
   let text =
 `Дата: ${val("date")}
@@ -387,13 +334,9 @@ function generate() {
 
   const entries = document.querySelectorAll(".entry");
 
-  entries.forEach((e, i) => {
+  entries.forEach((e) => {
 
     text += `
-
-========================
-ДОДАТКОВИЙ ЗАПИС ${i + 1}
-========================
 
 Азимут на ціль:
 ${e.querySelector(".azimuth").value}
@@ -404,35 +347,28 @@ ${e.querySelector(".distance").value}
 Висота цілі:
 ${e.querySelector(".targetHeight").value}
 
-А:
-${e.querySelector(".a").value}
-
-Д:
-${e.querySelector(".d").value}
-
-К:
-${e.querySelector(".k").value}
-
-Статус:
-${e.querySelector(".fireType").value}
-
-Кількість:
-${e.querySelector(".count").value}
-
-Клас:
-${e.querySelector(".classType").value}
-
 Коментар:
 ${e.querySelector(".comment").value}
-
-Особовий склад:
-${e.querySelector(".rank").value}
-${e.querySelector(".person").value}
 
 `;
   });
 
+  // Вивід на екран
   document.getElementById("output").innerText = text;
+
+  // Копіювання у буфер обміну
+  try {
+
+    await navigator.clipboard.writeText(text);
+
+    document.getElementById("success").innerText =
+      "Звіт скопійовано у буфер обміну";
+
+  } catch (err) {
+
+    document.getElementById("success").innerText =
+      "Не вдалося скопіювати звіт";
+  }
 }
 
 </script>
